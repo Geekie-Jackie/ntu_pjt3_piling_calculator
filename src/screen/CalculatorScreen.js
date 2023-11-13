@@ -111,7 +111,7 @@ const CalculatorScreen = () => {
             Actual Pile Length: {result.actualPileLength?.toFixed(2)} RLm/mSHD
           </Text>
           <Text variant="bodyLarge">
-            Pentration Depth: {result.pentrationDepth?.toFixed(2)} m
+            Penetration Depth: {result.penetrationDepth?.toFixed(2)} m
           </Text>
           <Text variant="bodyLarge">
             Percentage Difference: {result.percentageDifference?.toFixed(2)} %

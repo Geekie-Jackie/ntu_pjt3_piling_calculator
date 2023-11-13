@@ -20,7 +20,7 @@ const CalculatePileInstallation = (
   const actualPileLength = validatedCutOffLevel - actualToeLevel;
 
   // Calculate Pentration Depth
-  const pentrationDepth = validatedgroundLevel - actualToeLevel;
+  const penetrationDepth = validatedgroundLevel - actualToeLevel;
 
   // Calculate the Percentage Difference
   const percentageDifference =
@@ -35,7 +35,7 @@ const CalculatePileInstallation = (
   return {
     actualToeLevel,
     actualPileLength,
-    pentrationDepth,
+    penetrationDepth,
     percentageDifference: safePercentageDifference,
   };
 };
