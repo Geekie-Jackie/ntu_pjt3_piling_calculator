@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button, Card, Text } from "react-native-paper";
-import CalculatePileInstallation from "../utils/CalculatePileInstallation";
+import CalculatePileInstallation from "../util/CalculatePileInstallation";
+import EmailComposer from "../email/EmailComposer";
 
 const CalculatorScreen = () => {
   const [casingTopLevel, setCasingTopLevel] = useState("");
@@ -10,6 +11,14 @@ const CalculatorScreen = () => {
   const [tapeLength, setTapeLength] = useState("");
   const [designLength, setDesignLength] = useState("");
   const [result, setResult] = useState(null); // State to store the computed result
+
+  const validateFloatInput = (text, setValue) => {
+    // Regular expression to check if the input is a valid float number
+    const floatRegex = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
+    if (floatRegex.test(text) || text === "") {
+      setValue(text);
+    }
+  };
 
   const handleCalculate = () => {
     // Call CalculatePileInstallation and store the result directly in the state
@@ -25,6 +34,16 @@ const CalculatorScreen = () => {
     setResult(resultValue);
   };
 
+  const handleReset = () => {
+    // Clear all input fields and result
+    setCasingTopLevel("");
+    setGroundLevel("");
+    setCutOffLevel("");
+    setTapeLength("");
+    setDesignLength("");
+    setResult(null);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Card.Cover
@@ -36,35 +55,40 @@ const CalculatorScreen = () => {
       <TextInput
         label="Casing Top Level (RLm/mSHD)"
         value={casingTopLevel}
-        onChangeText={(text) => setCasingTopLevel(text)}
+        onChangeText={(text) => validateFloatInput(text, setCasingTopLevel)}
+        keyboardType="numeric"
         mode="outlined"
         style={styles.input}
       />
       <TextInput
         label="Ground Level (RLm/mSHD)"
         value={groundLevel}
-        onChangeText={(text) => setGroundLevel(text)}
+        onChangeText={(text) => validateFloatInput(text, setGroundLevel)}
+        keyboardType="numeric"
         mode="outlined"
         style={styles.input}
       />
       <TextInput
         label="Cut off Level (RLm/mSHD)"
         value={cutOffLevel}
-        onChangeText={(text) => setCutOffLevel(text)}
+        onChangeText={(text) => validateFloatInput(text, setCutOffLevel)}
+        keyboardType="numeric"
         mode="outlined"
         style={styles.input}
       />
       <TextInput
         label="Actual Length from Casing Top Level 'Tape Length' (m)"
         value={tapeLength}
-        onChangeText={(text) => setTapeLength(text)}
+        onChangeText={(text) => validateFloatInput(text, setTapeLength)}
+        keyboardType="numeric"
         mode="outlined"
         style={styles.input}
       />
       <TextInput
         label="Design Length from Cut Off Level (m)"
         value={designLength}
-        onChangeText={(text) => setDesignLength(text)}
+        onChangeText={(text) => validateFloatInput(text, setDesignLength)}
+        keyboardType="numeric"
         mode="outlined"
         style={styles.input}
       />
@@ -72,10 +96,29 @@ const CalculatorScreen = () => {
         Calculate
       </Button>
 
+      {/* Add the Reset button */}
+      <Button mode="outlined" onPress={handleReset} style={styles.button}>
+        Reset
+      </Button>
+
       {result !== null && (
         <Card style={{ marginTop: 16, padding: 16 }}>
           <Text variant="titleLarge">Result:</Text>
-          <Text variant="bodyLarge">{result}</Text>
+          <Text variant="bodyLarge">
+            Actual Toe Level: {result.actualToeLevel?.toFixed(2)} RLm/mSHD
+          </Text>
+          <Text variant="bodyLarge">
+            Actual Pile Length: {result.actualPileLength?.toFixed(2)} RLm/mSHD
+          </Text>
+          <Text variant="bodyLarge">
+            Pentration Depth: {result.pentrationDepth?.toFixed(2)} m
+          </Text>
+          <Text variant="bodyLarge">
+            Percentage Difference: {result.percentageDifference?.toFixed(2)} %
+          </Text>
+
+          {/* Include the EmailComposer component with the entire result object */}
+          <EmailComposer resultValues={result} />
         </Card>
       )}
     </ScrollView>
@@ -88,7 +131,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    // height: 400, // Adjust the height as needed
     marginBottom: 16,
   },
   input: {
