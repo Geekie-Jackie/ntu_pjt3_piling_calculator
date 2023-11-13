@@ -54,14 +54,14 @@ const CalculatorScreen = () => {
       <TextInput
         label="Actual Length from Casing Top Level 'Tape Length' (m)"
         value={tapeLength}
-        onChangeText={(text) => setDesignLength(text)}
+        onChangeText={(text) => setTapeLength(text)}
         mode="outlined"
         style={styles.input}
       />
       <TextInput
         label="Design Length from Cut Off Level (m)"
         value={designLength}
-        onChangeText={(text) => setCasingTopLevel(text)}
+        onChangeText={(text) => setDesignLength(text)}
         mode="outlined"
         style={styles.input}
       />
