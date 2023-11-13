@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { TextInput, Button, Card } from "react-native-paper";
-import { CalculatePileInstallation } from "../utils/CalculatePileInstallation";
+import { TextInput, Button, Card, Text } from "react-native-paper";
+import CalculatePileInstallation from "../utils/CalculatePileInstallation";
 
 const CalculatorScreen = () => {
   const [casingTopLevel, setCasingTopLevel] = useState("");
@@ -9,23 +9,26 @@ const CalculatorScreen = () => {
   const [cutOffLevel, setCutOffLevel] = useState("");
   const [tapeLength, setTapeLength] = useState("");
   const [designLength, setDesignLength] = useState("");
+  const [result, setResult] = useState(null); // State to store the computed result
 
   const handleCalculate = () => {
-    const result = CalculatePileInstallation(
+    // Call CalculatePileInstallation and store the result directly in the state
+    const resultValue = CalculatePileInstallation(
       parseFloat(casingTopLevel),
       parseFloat(groundLevel),
       parseFloat(cutOffLevel),
       parseFloat(tapeLength),
       parseFloat(designLength)
     );
-    // Handle the result as needed
-    console.log("Result:", result);
+
+    // Update the state with the computed result
+    setResult(resultValue);
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Card.Cover
-        source={require('../../assets/Piling_Diagram.png')}
+        source={require("../../assets/Piling_Diagram.png")}
         style={styles.image}
         resizeMode="contain"
       />
@@ -68,6 +71,13 @@ const CalculatorScreen = () => {
       <Button mode="contained" onPress={handleCalculate} style={styles.button}>
         Calculate
       </Button>
+
+      {result !== null && (
+        <Card style={{ marginTop: 16, padding: 16 }}>
+          <Text variant="titleLarge">Result:</Text>
+          <Text variant="bodyLarge">{result}</Text>
+        </Card>
+      )}
     </ScrollView>
   );
 };
@@ -77,7 +87,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   image: {
-    width: '100%',
+    width: "100%",
     // height: 400, // Adjust the height as needed
     marginBottom: 16,
   },
