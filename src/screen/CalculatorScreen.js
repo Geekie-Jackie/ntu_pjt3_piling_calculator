@@ -11,6 +11,7 @@ const CalculatorScreen = () => {
   const [tapeLength, setTapeLength] = useState("");
   const [designLength, setDesignLength] = useState("");
   const [result, setResult] = useState(null); // State to store the computed result
+  const [emailReady, setEmailReady] = useState(false); // New state to manage email sending
 
   const validateFloatInput = (text, setValue) => {
     // Regular expression to check if the input is a valid float number
@@ -32,6 +33,11 @@ const CalculatorScreen = () => {
 
     // Update the state with the computed result
     setResult(resultValue);
+    setEmailReady(false); // Reset email state when a new calculation is made
+  };
+
+  const handleSendEmail = () => {
+    setEmailReady(true); // Set the email state to true when the email button is pressed
   };
 
   const handleReset = () => {
@@ -101,6 +107,11 @@ const CalculatorScreen = () => {
         Reset
       </Button>
 
+      {/* Add a new button for sending email */}
+      <Button mode="contained" onPress={handleSendEmail} style={styles.button}>
+        Send Email
+      </Button>
+
       {result !== null && (
         <Card style={{ marginTop: 16, padding: 16 }}>
           <Text variant="titleLarge">Result:</Text>
@@ -108,7 +119,7 @@ const CalculatorScreen = () => {
             Actual Toe Level: {result.actualToeLevel?.toFixed(2)} RLm/mSHD
           </Text>
           <Text variant="bodyLarge">
-            Actual Pile Length: {result.actualPileLength?.toFixed(2)} RLm/mSHD
+            Actual Pile Length: {result.actualPileLength?.toFixed(2)} m
           </Text>
           <Text variant="bodyLarge">
             Penetration Depth: {result.penetrationDepth?.toFixed(2)} m
@@ -118,7 +129,7 @@ const CalculatorScreen = () => {
           </Text>
 
           {/* Include the EmailComposer component with the entire result object */}
-          <EmailComposer resultValues={result} />
+          {emailReady && <EmailComposer resultValues={result} />}
         </Card>
       )}
     </ScrollView>
