@@ -13,7 +13,7 @@ const EmailComposer = ({ resultValues }) => {
         2
       )} RLm/mSHD\nActual Pile Length: ${resultValues.actualPileLength?.toFixed(
         2
-      )} RLm/mSHD\nPenetration Depth: ${resultValues.penetrationDepth?.toFixed(
+      )} m\nPenetration Depth: ${resultValues.penetrationDepth?.toFixed(
         2
       )} m\nPercentage Difference: ${resultValues.percentageDifference?.toFixed(
         2
