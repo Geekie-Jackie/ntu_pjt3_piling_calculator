@@ -5,23 +5,30 @@ import { Camera } from "expo-camera";
 import { FAB } from "react-native-paper";
 import * as MediaLibrary from "expo-media-library";
 const CameraScreen = () => {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null); //stores the camera permission status
+  const [capturedPhoto, setCapturedPhoto] = useState(null); //stores the URI of a captured photo
   const cameraRef = useRef(null);
+  //useEffect hook will request camera permission and it also
+  //checks if the camera permission is granted and updates the hasCameraPermission state
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(status === "granted");
     })();
   }, []);
+  //this function will be called once we go to camera tab
+  //checks if camera permission is granted and if the camera is ready
   const handleTakePhoto = async () => {
     if (hasCameraPermission && cameraRef.current) {
       try {
+        //if permission is granted, we take a photo usign takePictureAsync
         const { uri } = await cameraRef.current.takePictureAsync();
+        //after taking photo, it updates capturedPhoto state with the photo's URI
         setCapturedPhoto(uri);
       } catch (error) {
         console.error("Error taking photo:", error);
       }
+      //this will be called if permission is not granted
     } else {
       Alert.alert(
         "Camera Permission",
@@ -30,22 +37,31 @@ const CameraScreen = () => {
       );
     }
   };
+  //this will be called once save button is pressed after taking a photo
   const handleSaveToGallery = async () => {
     if (capturedPhoto) {
       try {
+        //checks if there is a captured photo in capturedPhoto
+        //and if a photo is available it will save to the device's gallery
         await MediaLibrary.saveToLibraryAsync(capturedPhoto);
         Alert.alert("Success", "The photo has been saved to your gallery.", [
           { text: "OK" },
         ]);
+        //this error will be called for some unforseen errors i.e if device's storage space is not enough to save an image
       } catch (error) {
         console.error("Error saving photo to gallery:", error);
       }
+      //if there is no photo available to save
     } else {
       Alert.alert("Error", "No photo to save. Please take a photo first.", [
         { text: "OK" },
       ]);
     }
   };
+  //this return includes conditional rendering based on:
+  //granted camera permissions
+  //whether a photo is captured
+  //it renders either the camera view or the captured photo view, along with buttons for saving/deleting photo
   return (
     <View style={{ flex: 1 }}>
       {capturedPhoto ? (
@@ -61,6 +77,7 @@ const CameraScreen = () => {
             icon="delete"
             onPress={() => setCapturedPhoto(null)}
           />
+          {/* conditional rendering */}
         </View>
       ) : hasCameraPermission === null ? (
         <Text>Requesting camera permission...</Text>
@@ -84,5 +101,4 @@ const CameraScreen = () => {
     </View>
   );
 };
-
 export default CameraScreen;

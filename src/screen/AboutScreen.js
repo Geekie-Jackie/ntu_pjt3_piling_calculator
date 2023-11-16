@@ -1,7 +1,7 @@
 // src/components/AboutScreen.js
 import React from "react";
 import { ScrollView, Text, StyleSheet } from "react-native";
-import { Card, Paragraph } from "react-native-paper";
+import { Card } from "react-native-paper";
 
 const AboutScreen = () => {
   return (
