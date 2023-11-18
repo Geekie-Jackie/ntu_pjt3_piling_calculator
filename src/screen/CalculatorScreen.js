@@ -11,7 +11,7 @@ const CalculatorScreen = () => {
   const [tapeLength, setTapeLength] = useState("");
   const [designLength, setDesignLength] = useState("");
   const [result, setResult] = useState(null); // State to store the computed result
-  const [emailReady, setEmailReady] = useState(false); // New state to manage email sending
+  const [isEmailReadyToSend, setIsEmailReadyToSend] = useState(false); // New state for email activation
 
   const validateFloatInput = (text, setValue) => {
     // Regular expression to check if the input is a valid float number
@@ -33,11 +33,10 @@ const CalculatorScreen = () => {
 
     // Update the state with the computed result
     setResult(resultValue);
-    setEmailReady(false); // Reset email state when a new calculation is made
   };
 
   const handleSendEmail = () => {
-    setEmailReady(true); // Set the email state to true when the email button is pressed
+    setIsEmailReadyToSend(true); // Activate email sending
   };
 
   const handleReset = () => {
@@ -108,30 +107,36 @@ const CalculatorScreen = () => {
       </Button>
 
       {result !== null && (
-        <Card style={{ marginTop: 16, padding: 16 }}>
-          <Text variant="titleLarge">Result:</Text>
-          <Text variant="bodyLarge">
-            Actual Toe Level: {result.actualToeLevel?.toFixed(2)} RLm/mSHD
-          </Text>
-          <Text variant="bodyLarge">
-            Actual Pile Length: {result.actualPileLength?.toFixed(2)} m
-          </Text>
-          <Text variant="bodyLarge">
-            Penetration Depth: {result.penetrationDepth?.toFixed(2)} m
-          </Text>
-          <Text variant="bodyLarge">
-            Percentage Difference: {result.percentageDifference?.toFixed(2)} %
-          </Text>
+        <>
+          <Card style={{ marginTop: 16, padding: 16 }}>
+            <Text variant="titleLarge">Result:</Text>
+            <Text variant="bodyLarge">
+              Actual Toe Level: {result.actualToeLevel?.toFixed(2)} RLm/mSHD
+            </Text>
+            <Text variant="bodyLarge">
+              Actual Pile Length: {result.actualPileLength?.toFixed(2)} m
+            </Text>
+            <Text variant="bodyLarge">
+              Penetration Depth: {result.penetrationDepth?.toFixed(2)} m
+            </Text>
+            <Text variant="bodyLarge">
+              Percentage Difference: {result.percentageDifference?.toFixed(2)} %
+            </Text>
+          </Card>
 
-          {/* Include the EmailComposer component with the entire result object */}
-          {emailReady && <EmailComposer resultValues={result} />}
-        </Card>
+          {/* Render the "Send Email" button only when results are displayed */}
+          <Button
+            mode="contained"
+            onPress={handleSendEmail}
+            style={styles.button}
+          >
+            Send Email
+          </Button>
+
+          {/* Conditionally render the EmailComposer */}
+          {isEmailReadyToSend && <EmailComposer resultValues={result} />}
+        </>
       )}
-
-        {/* Add a new button for sending email */}
-        <Button mode="contained" onPress={handleSendEmail} style={styles.button}>
-        Send Email
-        </Button>
     </ScrollView>
   );
 };
