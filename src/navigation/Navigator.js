@@ -1,6 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { BottomNavigation, BottomNavigationTab, Layout, Text } from 'react-native-paper';
 import CalculatorScreen from "../screen/CalculatorScreen";
 import CameraScreen from "../screen/CameraScreen";
 import AboutScreen from "../screen/AboutScreen";

@@ -132,6 +132,11 @@ const CalculatorScreen = () => {
           {emailReady && <EmailComposer resultValues={result} />}
         </Card>
       )}
+
+        {/* Add a new button for sending email */}
+        <Button mode="contained" onPress={handleSendEmail} style={styles.button}>
+        Send Email
+        </Button>
     </ScrollView>
   );
 };
